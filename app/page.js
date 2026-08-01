@@ -47,15 +47,15 @@ const portfolioData = {
     { role: "Intern", company: "Verzeo", period: "Sep 2022 – Oct 2022", responsibilities: ["Designed robust machine learning models using Python and TensorFlow while conducting thorough data preprocessing and system evaluation."] }
   ],
   projects: [
-    { name: "Skin Care Recommendation", period: "Feb 2025 – Apr 2025", description: "Built an ML-based recommendation system using Python and Pandas to suggest skincare products based on skin type and ingredients." },
-    { name: "Pedestrian Detection", period: "Nov 2024", description: "Real-time pedestrian detection system using OpenCV and Haar cascades for automated object tracking and safety monitoring." },
-    { name: "Face Expression Recognition Using CNN", period: "Jul 2024", description: "Implemented a deep learning CNN model in TensorFlow to detect and classify human facial expressions through live camera feeds." },
-    { name: "Diabetes Prediction", period: "May 2024", description: "Designed a Random Forest classification model to predict diabetes risk using medical datasets with automated feature scaling and analysis." },
-    { name: "Ignite Guard (IoT)", period: "Apr 2024", description: "Created an IoT-based gas leak detection system integrating MQ-5 sensors and Python for real-time alert generation and safety monitoring." },
-    { name: "Movie Classification Review", period: "Apr 2024", description: "Built a sentiment analysis model using Gaussian Naive Bayes to classify movie reviews based on polarity and embeddings." },
-    { name: "ECG Prediction Using ML", period: "Sep 2023", description: "Engineered a machine learning pipeline to predict cardiac abnormalities from ECG signals using Scikit-learn and time-series analysis." },
-    { name: "Heart Disease Prediction Using AI", period: "Mar 2023 – Apr 2023", description: "Developed a predictive AI model using Python and Pandas to analyze clinical data for early heart disease risk assessment." },
-    { name: "Face Detection Using AI", period: "Sep 2022", description: "Built a real-time face detection system using OpenCV and deep learning to automate and improve identity recognition." }
+    { name: "Skin Care Recommendation", period: "Feb 2025 – Apr 2025", description: "Built an ML-based recommendation system using Python and Pandas to suggest skincare products based on skin type and ingredients.", github: "https://github.com/PRUTHVI-VANKA" },
+    { name: "Pedestrian Detection", period: "Nov 2024", description: "Real-time pedestrian detection system using OpenCV and Haar cascades for automated object tracking and safety monitoring.", github: "https://github.com/PRUTHVI-VANKA" },
+    { name: "Face Expression Recognition Using CNN", period: "Jul 2024", description: "Implemented a deep learning CNN model in TensorFlow to detect and classify human facial expressions through live camera feeds.", github: "https://github.com/PRUTHVI-VANKA" },
+    { name: "Diabetes Prediction", period: "May 2024", description: "Designed a Random Forest classification model to predict diabetes risk using medical datasets with automated feature scaling and analysis.", github: "https://github.com/PRUTHVI-VANKA" },
+    { name: "Ignite Guard (IoT)", period: "Apr 2024", description: "Created an IoT-based gas leak detection system integrating MQ-5 sensors and Python for real-time alert generation and safety monitoring.", github: "https://github.com/PRUTHVI-VANKA" },
+    { name: "Movie Classification Review", period: "Apr 2024", description: "Built a sentiment analysis model using Gaussian Naive Bayes to classify movie reviews based on polarity and embeddings.", github: "https://github.com/PRUTHVI-VANKA" },
+    { name: "ECG Prediction Using ML", period: "Sep 2023", description: "Engineered a machine learning pipeline to predict cardiac abnormalities from ECG signals using Scikit-learn and time-series analysis.", github: "https://github.com/PRUTHVI-VANKA" },
+    { name: "Heart Disease Prediction Using AI", period: "Mar 2023 – Apr 2023", description: "Developed a predictive AI model using Python and Pandas to analyze clinical data for early heart disease risk assessment.", github: "https://github.com/PRUTHVI-VANKA" },
+    { name: "Face Detection Using AI", period: "Sep 2022", description: "Built a real-time face detection system using OpenCV and deep learning to automate and improve identity recognition.", github: "https://github.com/PRUTHVI-VANKA" }
   ]
 };
 
@@ -90,7 +90,6 @@ export default function Portfolio() {
     }
   };
 
-  // Handle Wheel, Swipe & Keyboard Arrow Keys Navigation
   useEffect(() => {
     let lastTime = 0;
 
@@ -143,7 +142,6 @@ export default function Portfolio() {
         {isDark && <StarryBackground />}
         <GlowingOrbs isDark={isDark} />
 
-        {/* Cinematic Big Heading Flash Overlay showing Destination Page Name */}
         <AnimatePresence>
           {showTransitionOverlay && (
             <motion.div
@@ -168,11 +166,8 @@ export default function Portfolio() {
         />
 
         <ThemeToggle isDark={isDark} setIsDark={setIsDark} />
-
-        {/* Left-Side Floating Section Indicator */}
         <LeftSectionIndicator currentSection={currentSection} />
 
-        {/* Main Content with Horizontal Drag Support */}
         <motion.div
           className="flex-1 overflow-y-auto overflow-x-hidden z-10 pl-12 md:pl-24"
           drag="x"
@@ -532,14 +527,27 @@ function ProjectsPage() {
           {portfolioData.projects.map((project, index) => (
             <motion.div
               key={index}
-              className="p-6 rounded-2xl backdrop-blur-md flex flex-col justify-between bg-card border border-border shadow-xl"
+              className="p-6 rounded-2xl backdrop-blur-md flex flex-col justify-between bg-card border border-border shadow-xl relative group"
               initial={{ opacity: 0, scale: 0.93 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.04 }}
               whileHover={{ scale: 1.03, y: -4 }}
             >
               <div>
-                <h3 className="text-lg font-bold mb-1.5 text-foreground">{project.name}</h3>
+                <div className="flex justify-between items-start mb-1.5 gap-2">
+                  <h3 className="text-lg font-bold text-foreground">{project.name}</h3>
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-lg bg-muted/60 text-foreground hover:text-primary transition-colors border border-border shrink-0"
+                      title="View Source"
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                  )}
+                </div>
                 <p className="text-xs font-semibold mb-3 text-primary">{project.period}</p>
                 <p className="text-sm leading-relaxed text-muted-foreground">{project.description}</p>
               </div>
@@ -565,6 +573,7 @@ function ContactPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
+          {/* Email -> Opens Mailbox */}
           <div className="flex items-center justify-center gap-3 text-base md:text-lg text-muted-foreground">
             <Mail className="text-primary" size={22} />
             <a href={`mailto:${portfolioData.personal.email}`} className="hover:underline font-medium text-foreground">
@@ -572,9 +581,15 @@ function ContactPage() {
             </a>
           </div>
 
+          {/* Phone -> Opens WhatsApp */}
           <div className="flex items-center justify-center gap-3 text-base md:text-lg text-muted-foreground">
             <span className="text-xl">📱</span>
-            <a href={`tel:${portfolioData.personal.phone}`} className="hover:underline font-medium text-foreground">
+            <a 
+              href={`https://wa.me/${portfolioData.personal.phone.replace(/[^0-9]/g, '')}`} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:underline font-medium text-foreground"
+            >
               {portfolioData.personal.phone}
             </a>
           </div>
