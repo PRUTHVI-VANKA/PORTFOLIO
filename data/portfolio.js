@@ -40,13 +40,13 @@ export const portfolioData = {
       degree: "Class XII",
       institution: "Aditya Junior College",
       score: "89.6%",
-      year: "2019 – 2021"
+      year: "May 2019 – May 2021"
     },
     {
       degree: "Class X",
       institution: "Atimya VidyaPeeth",
       score: "80%",
-      year: "2018 – 2019"
+      year: "Apr 2018 – Mar 2019"
     }
   ],
 
@@ -61,7 +61,7 @@ export const portfolioData = {
     },
     {
       role: "IT Executive",
-      company: "Genesis",
+      company: "Genesis Shipping Services",
       period: "Aug 2025 – Mar 2026",
       responsibilities: [
         "Handled extensive IT support infrastructure, system troubleshooting, and routine maintenance across critical corporate business operations."
