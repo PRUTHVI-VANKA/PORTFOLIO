@@ -3,7 +3,153 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon, ChevronLeft, ChevronRight, Github, Linkedin, Mail, ExternalLink } from 'lucide-react';
-import { portfolioData } from '@/data/portfolio';
+
+export const portfolioData = {
+  personal: {
+    name: "Pruthvi Vanka",
+    title: "Aspiring AI/ML Engineer | Data Analyst | Python Developer",
+    description: "Analytical and performance-driven Computer Engineering student (2025 pass-out) skilled in Python, SQL, Power BI, and Flask. Experienced in building predictive models, deploying ML solutions, and creating interactive dashboards to transform raw data into actionable insights for Data Analyst or AI/ML roles.",
+    email: "vankapruthvi@gmail.com",
+    phone: "+91-9390350986",
+    location: "Vishakapatnam",
+    linkedin: "https://www.linkedin.com/in/pruthvi-vanka-7539093a4/",
+    github: "https://github.com/PRUTHVI-VANKA",
+    resumeLink: "/Pruthvi Resume.pdf"
+  },
+
+  skills: {
+    technical: [
+      { category: "Programming", items: ["Python", "SQL"] },
+      { category: "AI & ML", items: ["Scikit-learn", "TensorFlow", "OpenCV"] },
+      { category: "Data Analysis", items: ["Pandas", "NumPy", "EDA", "Excel"] },
+      { category: "Visualization", items: ["Matplotlib", "Seaborn", "Power BI", "Tableau"] },
+      { category: "Tools", items: ["Git", "Vercel", "Odoo ERP"] }
+    ],
+    soft: ["Fast Learner", "Project Management", "Team Collaboration", "Leadership", "Adaptability", "Problem Solving"]
+  },
+
+  certifications: [
+    "Complete SQL Bootcamp — Udemy",
+    "Introduction to Data Analytics — Coursera",
+    "Python 101 for Data Science — IBM",
+    "Data Analytics Essentials — Cisco Networking Academy"
+  ],
+
+  education: [
+    {
+      degree: "B.Tech in Computer Science Engineering (AIML)",
+      institution: "Bharati Vidyapeeth College of Engineering",
+      score: "CGPA: 8.9/10",
+      year: "Dec 2021 – Jun 2025"
+    },
+    {
+      degree: "Class XII",
+      institution: "Aditya Junior College",
+      score: "89.6%",
+      year: "2019 – 2021"
+    },
+    {
+      degree: "Class X",
+      institution: "Atimya VidyaPeeth",
+      score: "80%",
+      year: "2018 – 2019"
+    }
+  ],
+
+  experience: [
+    {
+      role: "IT Executive",
+      company: "OM Ship Suppliers",
+      period: "Mar 2026 – Present",
+      responsibilities: [
+        "Successfully managed Odoo ERP operations, provided comprehensive user support, and optimized daily technical tasks efficiently."
+      ]
+    },
+    {
+      role: "IT Executive",
+      company: "Genesis",
+      period: "Aug 2025 – Mar 2026",
+      responsibilities: [
+        "Handled extensive IT support infrastructure, system troubleshooting, and routine maintenance across critical corporate business operations."
+      ]
+    }
+  ],
+
+  internships: [
+    {
+      role: "Intern",
+      company: "Deendayal Port Authority",
+      period: "Jun 2024 – Aug 2024",
+      responsibilities: [
+        "Developed automated data-driven analytics solutions using MySQL and Python while successfully deploying predictive artificial intelligence models."
+      ]
+    },
+    {
+      role: "Intern",
+      company: "Techno Hacks EdTech",
+      period: "May 2024 – Jun 2024",
+      responsibilities: [
+        "Implemented core machine learning algorithms utilizing Python libraries alongside Scikit-learn for advanced real-world predictive modeling."
+      ]
+    },
+    {
+      role: "Intern",
+      company: "Verzeo",
+      period: "Sep 2022 – Oct 2022",
+      responsibilities: [
+        "Designed robust machine learning models using Python and TensorFlow while conducting thorough data preprocessing and system evaluation."
+      ]
+    }
+  ],
+
+  projects: [
+    {
+      name: "Skin Care Recommendation",
+      period: "Feb 2025 – Apr 2025",
+      description: "Built an ML-based recommendation system using Python and Pandas to suggest skincare products based on skin type and ingredients."
+    },
+    {
+      name: "Pedestrian Detection",
+      period: "Nov 2024",
+      description: "Real-time pedestrian detection system using OpenCV and Haar cascades for automated object tracking and safety monitoring."
+    },
+    {
+      name: "Face Expression Recognition Using CNN",
+      period: "Jul 2024",
+      description: "Implemented a deep learning CNN model in TensorFlow to detect and classify human facial expressions through live camera feeds."
+    },
+    {
+      name: "Diabetes Prediction",
+      period: "May 2024",
+      description: "Designed a Random Forest classification model to predict diabetes risk using medical datasets with automated feature scaling and analysis."
+    },
+    {
+      name: "Ignite Guard (IoT)",
+      period: "Apr 2024",
+      description: "Created an IoT-based gas leak detection system integrating MQ-5 sensors and Python for real-time alert generation and safety monitoring."
+    },
+    {
+      name: "Movie Classification Review",
+      period: "Apr 2024",
+      description: "Built a sentiment analysis model using Gaussian Naive Bayes to classify movie reviews based on polarity and embeddings."
+    },
+    {
+      name: "ECG Prediction Using ML",
+      period: "Sep 2023",
+      description: "Engineered a machine learning pipeline to predict cardiac abnormalities from ECG signals using Scikit-learn and time-series analysis."
+    },
+    {
+      name: "Heart Disease Prediction Using AI",
+      period: "Mar 2023 – Apr 2023",
+      description: "Developed a predictive AI model using Python and Pandas to analyze clinical data for early heart disease risk assessment."
+    },
+    {
+      name: "Face Detection Using AI",
+      period: "Sep 2022",
+      description: "Built a real-time face detection system using OpenCV and deep learning to automate and improve identity recognition."
+    }
+  ]
+};
 
 const sections = ['Home', 'Education', 'Experience', 'Projects', 'Contact'];
 
@@ -465,52 +611,102 @@ function EducationPage({ isDark }) {
 
 function ExperiencePage({ isDark }) {
   return (
-    <div className="w-full flex flex-col items-center justify-center px-6 md:px-12 lg:px-24 py-32">
+    <div className="w-full flex flex-col items-center justify-start px-6 md:px-12 lg:px-24 py-24">
       <div className="max-w-4xl w-full">
         <motion.h1
-          className={`text-4xl md:text-5xl font-bold mb-12 ${isDark ? 'text-white' : 'text-gray-900'}`}
+          className={`text-4xl md:text-5xl font-bold mb-8 ${isDark ? 'text-white' : 'text-gray-900'}`}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          Experience
+          Experience & Internships
         </motion.h1>
 
-        <div className="space-y-8">
-          {portfolioData.experience.map((exp, index) => (
-            <motion.div
-              key={index}
-              className={`p-6 rounded-xl ${
-                isDark ? 'bg-purple-900/20 border border-purple-800/30' : 'bg-white border border-gray-200'
-              } shadow-lg`}
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {exp.role}
-                  </h3>
-                  <p className={`${isDark ? 'text-purple-300' : 'text-gray-700'}`}>
-                    {exp.company}
-                  </p>
+        {/* Work Experience Section */}
+        <div className="mb-10">
+          <h2 className={`text-2xl font-semibold mb-6 ${isDark ? 'text-purple-300' : 'text-gray-800'}`}>
+            Work Experience
+          </h2>
+          <div className="space-y-6">
+            {portfolioData.experience.map((exp, index) => (
+              <motion.div
+                key={index}
+                className={`p-6 rounded-xl ${
+                  isDark ? 'bg-purple-900/20 border border-purple-800/30' : 'bg-white border border-gray-200'
+                } shadow-lg`}
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {exp.role}
+                    </h3>
+                    <p className={`${isDark ? 'text-purple-300' : 'text-gray-700'}`}>
+                      {exp.company}
+                    </p>
+                  </div>
+                  <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    {exp.period}
+                  </span>
                 </div>
-                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  {exp.period}
-                </span>
-              </div>
-              <ul className={`space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                {exp.responsibilities.map((resp, i) => (
-                  <li key={i} className="flex items-start">
-                    <span className={`mr-2 mt-1 ${isDark ? 'text-purple-400' : 'text-gray-800'}`}>•</span>
-                    {resp}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
+                <ul className={`space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  {exp.responsibilities.map((resp, i) => (
+                    <li key={i} className="flex items-start">
+                      <span className={`mr-2 mt-1 ${isDark ? 'text-purple-400' : 'text-gray-800'}`}>•</span>
+                      {resp}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
         </div>
+
+        {/* Internships Section */}
+        <div>
+          <h2 className={`text-2xl font-semibold mb-6 ${isDark ? 'text-purple-300' : 'text-gray-800'}`}>
+            Internships
+          </h2>
+          <div className="space-y-6 mb-12">
+            {portfolioData.internships.map((intern, index) => (
+              <motion.div
+                key={index}
+                className={`p-6 rounded-xl ${
+                  isDark ? 'bg-purple-900/20 border border-purple-800/30' : 'bg-white border border-gray-200'
+                } shadow-lg`}
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {intern.role}
+                    </h3>
+                    <p className={`${isDark ? 'text-purple-300' : 'text-gray-700'}`}>
+                      {intern.company}
+                    </p>
+                  </div>
+                  <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    {intern.period}
+                  </span>
+                </div>
+                <ul className={`space-y-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  {intern.responsibilities.map((resp, i) => (
+                    <li key={i} className="flex items-start">
+                      <span className={`mr-2 mt-1 ${isDark ? 'text-purple-400' : 'text-gray-800'}`}>•</span>
+                      {resp}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );
