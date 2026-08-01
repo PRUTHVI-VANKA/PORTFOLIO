@@ -63,7 +63,7 @@ const sections = ['Home', 'Education', 'Experience', 'Projects', 'Contact'];
 
 export default function Portfolio() {
   const [currentSection, setCurrentSection] = useState(0);
-  const [targetSection, setTargetSection] = useState(0); // Tracks destination page name for flash overlay
+  const [targetSection, setTargetSection] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
   const [showTransitionOverlay, setShowTransitionOverlay] = useState(false);
@@ -81,41 +81,54 @@ export default function Portfolio() {
 
   const changeSection = (newIndex) => {
     if (newIndex >= 0 && newIndex < sections.length && newIndex !== currentSection) {
-      setTargetSection(newIndex); // Set destination section for overlay
+      setTargetSection(newIndex);
       setShowTransitionOverlay(true);
       setTimeout(() => {
         setCurrentSection(newIndex);
         setShowTransitionOverlay(false);
-      }, 500); // Cinematic flash duration
+      }, 500);
     }
   };
 
-  // Handle Wheel / Horizontal Navigation safely (Ignoring pure vertical scroll inside content)
+  // Handle Wheel, Swipe & Keyboard Arrow Keys Navigation
   useEffect(() => {
     let lastTime = 0;
-    const handleWheel = (e) => {
-      // If user is scrolling vertically with dominant deltaY, check if they are trying to scroll inside content
-      // We only trigger page change if horizontal intent (deltaX) is strong or vertical scroll happens at edges / non-scrollable areas
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 20) {
-        const now = Date.now();
-        if (now - lastTime < 900) return;
 
-        if (e.deltaX > 20) {
-          if (currentSection < sections.length - 1) {
-            changeSection(currentSection + 1);
-            lastTime = now;
-          }
-        } else if (e.deltaX < -20) {
-          if (currentSection > 0) {
-            changeSection(currentSection - 1);
-            lastTime = now;
-          }
-        }
+    const handleNavigation = (direction) => {
+      const now = Date.now();
+      if (now - lastTime < 900) return;
+
+      if (direction === 'next' && currentSection < sections.length - 1) {
+        changeSection(currentSection + 1);
+        lastTime = now;
+      } else if (direction === 'prev' && currentSection > 0) {
+        changeSection(currentSection - 1);
+        lastTime = now;
+      }
+    };
+
+    const handleWheel = (e) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 20) {
+        if (e.deltaX > 20) handleNavigation('next');
+        else if (e.deltaX < -20) handleNavigation('prev');
+      }
+    };
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') {
+        handleNavigation('next');
+      } else if (e.key === 'ArrowLeft') {
+        handleNavigation('prev');
       }
     };
 
     window.addEventListener('wheel', handleWheel, { passive: true });
-    return () => window.removeEventListener('wheel', handleWheel);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [currentSection]);
 
   const navigateToSection = (index) => {
@@ -130,7 +143,7 @@ export default function Portfolio() {
         {isDark && <StarryBackground />}
         <GlowingOrbs isDark={isDark} />
 
-        {/* Cinematic Big Heading Flash Overlay showing DESTINATION Page Name */}
+        {/* Cinematic Big Heading Flash Overlay showing Destination Page Name */}
         <AnimatePresence>
           {showTransitionOverlay && (
             <motion.div
@@ -159,18 +172,17 @@ export default function Portfolio() {
         {/* Left-Side Floating Section Indicator */}
         <LeftSectionIndicator currentSection={currentSection} />
 
-        {/* Main Content with Strict Horizontal-Only Drag */}
+        {/* Main Content with Horizontal Drag Support */}
         <motion.div
           className="flex-1 overflow-y-auto overflow-x-hidden z-10 pl-12 md:pl-24"
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.2}
           onDragEnd={(e, { offset, velocity }) => {
-            // Require intentional horizontal swipe to avoid conflicts with vertical scrolling
             if (offset.x < -80 || velocity.x < -400) {
-              changeSection(currentSection + 1); // Swipe Left -> Next Page
+              changeSection(currentSection + 1);
             } else if (offset.x > 80 || velocity.x > 400) {
-              changeSection(currentSection - 1); // Swipe Right -> Prev Page
+              changeSection(currentSection - 1);
             }
           }}
         >
