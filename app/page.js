@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon, ChevronLeft, ChevronRight, Github, Linkedin, Mail, ExternalLink } from 'lucide-react';
 
-export const portfolioData = {
+const portfolioData = {
   personal: {
     name: "Pruthvi Vanka",
     title: "Aspiring AI/ML Engineer | Data Analyst | Python Developer",
