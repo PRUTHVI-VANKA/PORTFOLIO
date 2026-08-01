@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sun, Moon, ChevronLeft, ChevronRight, Github, Linkedin, Mail, ExternalLink } from 'lucide-react';
+import { Menu, X, Sun, Moon, Github, Linkedin, Mail, ExternalLink } from 'lucide-react';
 
 const portfolioData = {
   personal: {
@@ -34,12 +34,12 @@ const portfolioData = {
   ],
   education: [
     { degree: "B.Tech in Computer Science Engineering (AIML)", institution: "Bharati Vidyapeeth College of Engineering", score: "CGPA: 8.9/10", year: "Dec 2021 – Jun 2025" },
-    { degree: "Class XII", institution: "Aditya Junior College", score: "89.6%", year: "2019 – 2021" },
-    { degree: "Class X", institution: "Atimya VidyaPeeth", score: "80%", year: "2018 – 2019" }
+    { degree: "Class XII", institution: "Aditya Junior College", score: "89.6%", year: "May 2019 – May 2021" },
+    { degree: "Class X", institution: "Atimya VidyaPeeth", score: "80%", year: "Apr 2018 – Mar 2019" }
   ],
   experience: [
     { role: "IT Executive", company: "OM Ship Suppliers", period: "Mar 2026 – Present", responsibilities: ["Successfully managed Odoo ERP operations, provided comprehensive user support, and optimized daily technical tasks efficiently."] },
-    { role: "IT Executive", company: "Genesis", period: "Aug 2025 – Mar 2026", responsibilities: ["Handled extensive IT support infrastructure, system troubleshooting, and routine maintenance across critical corporate business operations."] }
+    { role: "IT Executive", company: "Genesis Shipping Services", period: "Aug 2025 – Mar 2026", responsibilities: ["Handled extensive IT support infrastructure, system troubleshooting, and routine maintenance across critical corporate business operations."] }
   ],
   internships: [
     { role: "Intern", company: "Deendayal Port Authority", period: "Jun 2024 – Aug 2024", responsibilities: ["Developed automated data-driven analytics solutions using MySQL and Python while successfully deploying predictive artificial intelligence models."] },
@@ -63,8 +63,10 @@ const sections = ['Home', 'Education', 'Experience', 'Projects', 'Contact'];
 
 export default function Portfolio() {
   const [currentSection, setCurrentSection] = useState(0);
+  const [targetSection, setTargetSection] = useState(0); // Tracks destination page name for flash overlay
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
+  const [showTransitionOverlay, setShowTransitionOverlay] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -77,20 +79,73 @@ export default function Portfolio() {
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }, [isDark]);
 
+  const changeSection = (newIndex) => {
+    if (newIndex >= 0 && newIndex < sections.length && newIndex !== currentSection) {
+      setTargetSection(newIndex); // Set destination section for overlay
+      setShowTransitionOverlay(true);
+      setTimeout(() => {
+        setCurrentSection(newIndex);
+        setShowTransitionOverlay(false);
+      }, 500); // Cinematic flash duration
+    }
+  };
+
+  // Handle Wheel / Horizontal Navigation safely (Ignoring pure vertical scroll inside content)
+  useEffect(() => {
+    let lastTime = 0;
+    const handleWheel = (e) => {
+      // If user is scrolling vertically with dominant deltaY, check if they are trying to scroll inside content
+      // We only trigger page change if horizontal intent (deltaX) is strong or vertical scroll happens at edges / non-scrollable areas
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 20) {
+        const now = Date.now();
+        if (now - lastTime < 900) return;
+
+        if (e.deltaX > 20) {
+          if (currentSection < sections.length - 1) {
+            changeSection(currentSection + 1);
+            lastTime = now;
+          }
+        } else if (e.deltaX < -20) {
+          if (currentSection > 0) {
+            changeSection(currentSection - 1);
+            lastTime = now;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [currentSection]);
+
   const navigateToSection = (index) => {
-    setCurrentSection(index);
+    changeSection(index);
     setIsMenuOpen(false);
   };
 
-  const handlePrev = () => { if (currentSection > 0) setCurrentSection(currentSection - 1); };
-  const handleNext = () => { if (currentSection < sections.length - 1) setCurrentSection(currentSection + 1); };
-
   return (
-    <div className={`${isDark ? 'dark' : ''} h-screen w-screen overflow-hidden`}>
+    <div className={`${isDark ? 'dark' : ''} h-screen w-screen overflow-hidden select-none`}>
       <div className="h-full w-full overflow-hidden transition-colors duration-500 flex flex-col relative bg-background text-foreground">
         
         {isDark && <StarryBackground />}
         <GlowingOrbs isDark={isDark} />
+
+        {/* Cinematic Big Heading Flash Overlay showing DESTINATION Page Name */}
+        <AnimatePresence>
+          {showTransitionOverlay && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.1 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-2xl bg-background/80 pointer-events-none"
+            >
+              <h1 className="text-5xl md:text-8xl font-black uppercase tracking-wider text-primary animate-pulse">
+                {sections[targetSection]}
+              </h1>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <HamburgerMenu
           isOpen={isMenuOpen}
@@ -101,35 +156,54 @@ export default function Portfolio() {
 
         <ThemeToggle isDark={isDark} setIsDark={setIsDark} />
 
-        <NavigationArrows
-          handlePrev={handlePrev}
-          handleNext={handleNext}
-          currentSection={currentSection}
-          totalSections={sections.length}
-        />
+        {/* Left-Side Floating Section Indicator */}
+        <LeftSectionIndicator currentSection={currentSection} />
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSection}
-            initial={{ opacity: 0, scale: 0.96, y: 15 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 1.04, y: -15 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="flex-1 overflow-y-auto overflow-x-hidden z-10"
-          >
-            {currentSection === 0 && <HomePage />}
-            {currentSection === 1 && <EducationPage />}
-            {currentSection === 2 && <ExperiencePage />}
-            {currentSection === 3 && <ProjectsPage />}
-            {currentSection === 4 && <ContactPage />}
-          </motion.div>
-        </AnimatePresence>
+        {/* Main Content with Strict Horizontal-Only Drag */}
+        <motion.div
+          className="flex-1 overflow-y-auto overflow-x-hidden z-10 pl-12 md:pl-24"
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.2}
+          onDragEnd={(e, { offset, velocity }) => {
+            // Require intentional horizontal swipe to avoid conflicts with vertical scrolling
+            if (offset.x < -80 || velocity.x < -400) {
+              changeSection(currentSection + 1); // Swipe Left -> Next Page
+            } else if (offset.x > 80 || velocity.x > 400) {
+              changeSection(currentSection - 1); // Swipe Right -> Prev Page
+            }
+          }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSection}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="min-h-full flex flex-col justify-center"
+            >
+              {currentSection === 0 && <HomePage />}
+              {currentSection === 1 && <EducationPage />}
+              {currentSection === 2 && <ExperiencePage />}
+              {currentSection === 3 && <ProjectsPage />}
+              {currentSection === 4 && <ContactPage />}
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
 
-        <SectionIndicator
-          currentSection={currentSection}
-          totalSections={sections.length}
-          navigateToSection={navigateToSection}
-        />
+function LeftSectionIndicator({ currentSection }) {
+  const currentTitle = sections[currentSection];
+  return (
+    <div className="absolute left-6 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-center pointer-events-none">
+      <div className="text-xs font-mono tracking-widest text-primary/60 uppercase flex items-center gap-4 rotate-180" style={{ writingMode: 'vertical-rl' }}>
+        <span>// 0{currentSection + 1}</span>
+        <span className="w-8 h-[1px] bg-primary/30"></span>
+        <span className="text-foreground/80 font-semibold">{currentTitle}</span>
       </div>
     </div>
   );
@@ -224,62 +298,16 @@ function ThemeToggle({ isDark, setIsDark }) {
   );
 }
 
-function NavigationArrows({ handlePrev, handleNext, currentSection, totalSections }) {
-  return (
-    <div className="fixed bottom-6 right-6 z-40 flex gap-3">
-      <motion.button
-        onClick={handlePrev}
-        disabled={currentSection === 0}
-        className={`p-3 rounded-full transition-all duration-300 backdrop-blur-md bg-card border border-border text-foreground shadow-lg ${
-          currentSection === 0 ? 'opacity-30 cursor-not-allowed' : ''
-        }`}
-        whileHover={currentSection !== 0 ? { scale: 1.1 } : {}}
-      >
-        <ChevronLeft size={22} />
-      </motion.button>
-      <motion.button
-        onClick={handleNext}
-        disabled={currentSection === totalSections - 1}
-        className={`p-3 rounded-full transition-all duration-300 backdrop-blur-md bg-card border border-border text-foreground shadow-lg ${
-          currentSection === totalSections - 1 ? 'opacity-30 cursor-not-allowed' : ''
-        }`}
-        whileHover={currentSection !== totalSections - 1 ? { scale: 1.1 } : {}}
-      >
-        <ChevronRight size={22} />
-      </motion.button>
-    </div>
-  );
-}
-
-function SectionIndicator({ currentSection, totalSections, navigateToSection }) {
-  return (
-    <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-3">
-      {[...Array(totalSections)].map((_, index) => (
-        <motion.button
-          key={index}
-          onClick={() => navigateToSection(index)}
-          className={`rounded-full transition-all duration-300 ${
-            currentSection === index
-              ? 'bg-primary w-2 h-8 shadow-md'
-              : 'bg-muted-foreground/40 w-2 h-2 hover:bg-muted-foreground'
-          }`}
-          whileHover={{ scale: 1.3 }}
-        />
-      ))}
-    </div>
-  );
-}
-
 function HomePage() {
   return (
     <div className="w-full flex flex-col items-center justify-center px-6 md:px-12 lg:px-24 py-20 min-h-full">
       <div className="max-w-5xl w-full">
         <motion.div initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           
-          {/* ✨ Clean & Minimalist Title Badge */}
-          <div className="inline-flex items-center px-5 py-2.5 rounded-full backdrop-blur-xl bg-card/80 border border-primary/30 shadow-lg shadow-primary/5">
+          <div className="inline-flex items-center px-5 py-2.5 rounded-full backdrop-blur-xl bg-card/80 border border-primary/30 shadow-lg shadow-primary/5 mb-6">
             <span className="text-foreground/95 tracking-wide font-medium text-sm">Code. Predict. Deploy.</span>
           </div>
+
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-4 text-foreground">
             {portfolioData.personal.name}
           </h1>
