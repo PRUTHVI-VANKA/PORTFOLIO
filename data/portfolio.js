@@ -1,7 +1,7 @@
 export const portfolioData = {
   personal: {
     name: "Pruthvi Vanka",
-    title: "Computer Engineering Student",
+    title: "Aspiring AI/ML Engineer | Data Analyst | Python Developer",
     description: "Analytical and performance-driven Computer Engineering student (2025 pass-out) skilled in Python, SQL, Power BI, and Flask. Experienced in building predictive models, deploying ML solutions, and creating interactive dashboards to transform raw data into actionable insights for Data Analyst or AI/ML roles.",
     email: "vankapruthvi@gmail.com",
     phone: "+91-9390350986",
