@@ -47,15 +47,58 @@ const portfolioData = {
     { role: "Intern", company: "Verzeo", period: "Sep 2022 – Oct 2022", responsibilities: ["Designed robust machine learning models using Python and TensorFlow while conducting thorough data preprocessing and system evaluation."] }
   ],
   projects: [
-    { name: "Skin Care Recommendation", period: "Feb 2025 – Apr 2025", description: "Built an ML-based recommendation system using Python and Pandas to suggest skincare products based on skin type and ingredients.", github: "https://github.com/PRUTHVI-VANKA" },
-    { name: "Pedestrian Detection", period: "Nov 2024", description: "Real-time pedestrian detection system using OpenCV and Haar cascades for automated object tracking and safety monitoring.", github: "https://github.com/PRUTHVI-VANKA" },
-    { name: "Face Expression Recognition Using CNN", period: "Jul 2024", description: "Implemented a deep learning CNN model in TensorFlow to detect and classify human facial expressions through live camera feeds.", github: "https://github.com/PRUTHVI-VANKA" },
-    { name: "Diabetes Prediction", period: "May 2024", description: "Designed a Random Forest classification model to predict diabetes risk using medical datasets with automated feature scaling and analysis.", github: "https://github.com/PRUTHVI-VANKA" },
-    { name: "Ignite Guard (IoT)", period: "Apr 2024", description: "Created an IoT-based gas leak detection system integrating MQ-5 sensors and Python for real-time alert generation and safety monitoring.", github: "https://github.com/PRUTHVI-VANKA" },
-    { name: "Movie Classification Review", period: "Apr 2024", description: "Built a sentiment analysis model using Gaussian Naive Bayes to classify movie reviews based on polarity and embeddings.", github: "https://github.com/PRUTHVI-VANKA" },
-    { name: "ECG Prediction Using ML", period: "Sep 2023", description: "Engineered a machine learning pipeline to predict cardiac abnormalities from ECG signals using Scikit-learn and time-series analysis.", github: "https://github.com/PRUTHVI-VANKA" },
-    { name: "Heart Disease Prediction Using AI", period: "Mar 2023 – Apr 2023", description: "Developed a predictive AI model using Python and Pandas to analyze clinical data for early heart disease risk assessment.", github: "https://github.com/PRUTHVI-VANKA" },
-    { name: "Face Detection Using AI", period: "Sep 2022", description: "Built a real-time face detection system using OpenCV and deep learning to automate and improve identity recognition.", github: "https://github.com/PRUTHVI-VANKA" }
+    { 
+      name: "Skin Care Recommendation", 
+      period: "Feb 2025 – Apr 2025", 
+      description: "Built an ML-based recommendation system using Python and Pandas to suggest skincare products based on skin type and ingredients.", 
+      github: "https://github.com/PRUTHVI-VANKA/Skin-Care-Recommendation.git" 
+    },
+    { 
+      name: "Pedestrian Detection", 
+      period: "Nov 2024", 
+      description: "Real-time pedestrian detection system using OpenCV and Haar cascades for automated object tracking and safety monitoring.", 
+      github: "https://github.com/PRUTHVI-VANKA/Pedestrian-Detection.git" 
+    },
+    { 
+      name: "Face Expression Recognition Using CNN", 
+      period: "Jul 2024", 
+      description: "Implemented a deep learning CNN model in TensorFlow to detect and classify human facial expressions through live camera feeds.", 
+      github: "https://github.com/PRUTHVI-VANKA/Face-Expression-Detection-.git" 
+    },
+    { 
+      name: "Diabetes Prediction", 
+      period: "May 2024", 
+      description: "Designed a Random Forest classification model to predict diabetes risk using medical datasets with automated feature scaling and analysis.", 
+      github: "https://github.com/PRUTHVI-VANKA/Diabetes-Prediction-Analysis.git" 
+    },
+    { 
+      name: "Ignite Guard (IoT)", 
+      period: "Apr 2024", 
+      description: "Created an IoT-based gas leak detection system integrating MQ-5 sensors and Python for real-time alert generation and safety monitoring." 
+    },
+    { 
+      name: "Movie Classification Review", 
+      period: "Apr 2024", 
+      description: "Built a sentiment analysis model using Gaussian Naive Bayes to classify movie reviews based on polarity and embeddings.", 
+      github: "https://github.com/PRUTHVI-VANKA/Movie-Review-Classification.git" 
+    },
+    { 
+      name: "ECG Prediction Using ML", 
+      period: "Sep 2023", 
+      description: "Engineered a machine learning pipeline to predict cardiac abnormalities from ECG signals using Scikit-learn and time-series analysis." 
+    },
+    { 
+      name: "Heart Disease Prediction Using AI", 
+      period: "Mar 2023 – Apr 2023", 
+      description: "Developed a predictive AI model using Python and Pandas to analyze clinical data for early heart disease risk assessment.", 
+      github: "https://github.com/PRUTHVI-VANKA/Heart-Disease-Prediction.git" 
+    },
+    { 
+      name: "Face Detection Using AI", 
+      period: "Sep 2022", 
+      description: "Built a real-time face detection system using OpenCV and deep learning to automate and improve identity recognition.", 
+      github: "https://github.com/PRUTHVI-VANKA/Face-Detection-Using-AI.git" 
+    }
   ]
 };
 
@@ -573,7 +616,6 @@ function ContactPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          {/* Email -> Opens Mailbox */}
           <div className="flex items-center justify-center gap-3 text-base md:text-lg text-muted-foreground">
             <Mail className="text-primary" size={22} />
             <a href={`mailto:${portfolioData.personal.email}`} className="hover:underline font-medium text-foreground">
@@ -581,7 +623,6 @@ function ContactPage() {
             </a>
           </div>
 
-          {/* Phone -> Opens WhatsApp */}
           <div className="flex items-center justify-center gap-3 text-base md:text-lg text-muted-foreground">
             <span className="text-xl">📱</span>
             <a 
